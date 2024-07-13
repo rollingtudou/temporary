@@ -1,6 +1,9 @@
 #include"Date.h"
 
 
+
+
+
 Date::Date(int year, int month, int day)
 {
 	_year = year;
@@ -116,4 +119,55 @@ Date Date::operator+(int day)
 	tmp += day;
 
 	return tmp;
+}
+
+// 前置++
+Date& Date::operator++()
+{
+	*this += 1;
+
+	return *this;                     
+}
+
+// 后置++
+Date Date::operator++(int)
+{
+	Date temp = *this;
+	*this += 1;
+
+	return temp;
+}
+
+bool Date::CheckDate()
+{
+	if (_month < 1 || _month > 12
+		|| _day < 1 || _day > GetMonthDay(_year, _month))
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+ostream& operator<<(ostream& out, const Date& d)
+{
+
+	out << d._year << "月" << d._month << "月" << d._day << "日" << endl;
+
+	return out;
+}
+
+istream& operator>>(istream& in, Date& d)
+{
+	cout << "请以此输入年月日 > ";
+	in >> d._year >> d._month >> d._day;
+
+	if (!d.CheckDate())
+	{
+		cout << "Date is error!" << endl;
+	}
+
+	return in;
 }

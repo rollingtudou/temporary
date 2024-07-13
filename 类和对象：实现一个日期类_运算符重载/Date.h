@@ -37,6 +37,14 @@ public:
 	Date& operator+=(int day);
 
 	Date operator-(int day);
+
+	bool CheckDate();
+
+	Date operator++(int);
+	Date& operator++();
+
+	friend ostream& operator<<(ostream& out, const Date& d);
+	friend istream& operator>>(istream& in, Date& d);
 private:
 	int _year;
 	int _month;

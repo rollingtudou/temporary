@@ -291,7 +291,42 @@
 //        return sign * result;
 //    }
 //};
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+//
+//isalnum 函数的作用
+//isalnum 是 C / C++ 中的一个标准库函数，用于判断一个字符是否为字母或数字。
+//如果字符是字母或数字，isalnum 返回非零值（通常为 1）；
+//如果字符不是字母或数字，isalnum 返回 0。
 
+//#include<al>
 
-
-
+//class Solution {
+//public:
+//	bool isPalindrome(string s) {
+//		int left = 0, right = s.size() - 1;
+//		while (left < right) {
+//
+//			// 这两个while用来在遇到其他字符的时候跳过字符
+//			while (left < right && !isalnum(s[left])) {
+//				left++;
+//			}
+//			while (left < right && !isalnum(s[right])) {
+//				right--;
+//			}
+//
+//			// 进行比较
+//			if (tolower(s[left]) != tolower(s[right])) {
+//				return false;
+//			}
+//			left++;
+//			right--;
+//		}
+//		return true;
+//	}
+//};

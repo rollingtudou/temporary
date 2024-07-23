@@ -330,3 +330,56 @@
 //		return true;
 //	}
 //};
+//
+//class Solution {
+//public:
+//    // 去除首尾空格的函数
+//    std::string trim(const std::string& s) {
+//        auto s_begin = s.find_first_not_of(' ');
+//        if (s_begin == std::string::npos) {
+//            return "";
+//        }
+//        auto s_end = s.find_last_not_of(' ');
+//        return s.substr(s_begin, s_end - s_begin + 1);
+//    }
+//
+//    // 反转单词的函数
+//    std::string reverseWords(std::string s) {
+//        // 修剪首尾空格
+//        s = trim(s);
+//
+//        if (s.empty()) {
+//            return "";
+//        }
+//
+//        int start = 0;
+//        int end = 0;
+//        std::string reversedString;
+//
+//        while (end <= s.size()) {
+//            // 找到当前单词的末尾
+//            while (end < s.size() && s[end] != ' ') {
+//                end++;
+//            }
+//
+//            // 反转当前单词
+//            for (int i = end - 1; i >= start; i--) {
+//                reversedString += s[i];
+//            }
+//
+//            // 在反转的单词后添加空格（最后一个单词除外）
+//            if (end < s.size()) {
+//                reversedString += ' ';
+//            }
+//
+//            // 更新下一个单词的起始和结束指针
+//            end++;
+//            start = end;
+//        }
+//
+//        return reversedString;
+//    }
+//};
+
+
+

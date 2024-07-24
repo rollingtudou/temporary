@@ -31,6 +31,8 @@ namespace bee
 	string& string::operator+=(char ch)
 	{
 		push_back(ch);
+
+		return *this;
 	}
 
 	string& string::operator+=(const char* str)
@@ -82,10 +84,172 @@ namespace bee
 		++_size;
 	}
 
-	void insert(size_t pos, const char* str);
-	void erase(size_t pos, size_t len = npos);
+	void string::insert(size_t pos, const char* str)
+	{
+		assert(pos < _size);
 
-	size_t find(char ch, size_t pos = 0);
-	size_t find(const char* str, size_t pos = 0);
-	string substr(size_t pos = 0, size_t len = npos);
+		size_t len = strlen(str);
+		if (len + _size > _capacity)
+		{
+			reserve(_size +len > 2 * _capacity ? _size + len : 2 * _capacity);
+		}
+
+		size_t end = _size + len;
+		while (end > pos + len - 1)
+		{
+			_str[end] = _str[end - len];
+			end--;
+		}
+
+		for (size_t i = 0; i < len; i++)
+		{
+			_str[pos + i] = str[i];
+		}
+
+		_size += len;
+	}
+	void string::erase(size_t pos, size_t len)
+	{
+		assert(pos < _size);
+
+		if (pos + len >= _size)
+		{
+			_str[pos] = '\0';
+			_size = pos;
+		}
+		else
+		{
+			for (size_t i = pos + len; i <= _size; i++)
+			{
+				_str[i - len] = _str[i];
+			}
+
+			_size -= len;
+		}
+	}
+
+	size_t string::find(char ch, size_t pos)
+	{
+		assert(pos < _size);
+
+		for (size_t i = pos; i < _size; ++i)
+		{
+			if (_str[i] == ch)
+			{
+				return i;
+			}
+		}
+
+		return npos;
+	}
+	size_t string::find(const char* str, size_t pos)
+	{
+		assert(pos < _size);
+
+		const char* ptr = strstr(_str + pos, str);
+		if (ptr == nullptr)
+		{
+			return npos;
+		}
+		else
+		{
+			return ptr - _str;
+		}
+	}
+
+
+	string string::substr(size_t pos, size_t len)
+	{
+		assert(pos < _size);
+
+		if (pos + len > _size)
+		{
+			len = _size - pos;
+		}
+
+		string sub;
+		for (size_t i = 0; i < len; i++)
+		{
+			sub[i] += _str[pos + i];
+		}
+		
+		return sub;
+	}
+
+	bool operator==(const string& s1, const string& s2)
+	{
+		return strcmp(s1.c_str(), s2.c_str()) == 0;
+	}
+
+	bool operator<(const string& s1, const string& s2)
+	{
+		return strcmp(s1.c_str(), s2.c_str()) < 0;
+	}
+
+	bool operator<=(const string& s1, const string& s2)
+	{
+		return (s1 < s2) || (s1 == s2);
+	}
+
+	bool operator>(const string& s1, const string& s2)
+	{
+		return !(s1 <= s2);
+	}
+
+	bool operator>=(const string& s1, const string& s2)
+	{
+		return !(s1 < s2);
+	}
+	
+	bool operator!=(const string& s1, const string& s2)
+	{
+		return !(s1 == s2);
+	}
+
+
+	ostream& operator<<(ostream& out, const string& s)
+	{
+		for (auto ch: s)
+		{
+			out << ch;
+		}
+
+		return out;
+	}
+
+	istream& operator>>(istream& in, string& s)
+	{
+		s.clear();
+
+		char buff[256];
+		int i = 0;
+
+		char ch;
+		ch = in.get();
+		while (ch != ' ' && ch != '\n' && ch != EOF)
+		{
+			buff[i++] = ch;
+
+			// 255存的是最后一位'\0'
+			if (i == 255)
+			{
+				buff[255] = '\0';
+				s += buff;
+				i = 0;
+			}
+
+			ch = in.get();
+		}
+
+		if (i > 0)
+		{
+			buff[i] = '\0';
+			s += buff;
+		}
+
+		return in;
+	}
+
+
+
 }

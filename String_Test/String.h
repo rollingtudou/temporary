@@ -1,7 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
 #pragma once
 
 #include<iostream>
 #include<assert.h>
+using namespace std;
 
 
 namespace bee
@@ -128,5 +131,15 @@ namespace bee
 
 		static const size_t npos;
 	};
+
+	bool operator<(const string& s1, const string& s2);
+	bool operator<=(const string& s1, const string& s2);
+	bool operator>(const string& s1, const string& s2);
+	bool operator>=(const string& s1, const string& s2);
+	bool operator==(const string& s1, const string& s2);
+	bool operator!=(const string& s1, const string& s2);
+
+	ostream& operator<<(ostream& out, const string& s);
+	istream& operator>>(istream& in, string& s);
 
 }

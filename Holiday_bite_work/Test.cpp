@@ -1,4 +1,6 @@
-﻿//﻿class A
+﻿#define _CRT_SECURE_NO_WARNINGS 1
+
+//﻿class A
 //{
 //
 //public:
@@ -383,3 +385,96 @@
 
 
 /// test git
+
+//
+// 
+// 
+// 
+// 
+// 
+// 
+//                               写时拷贝
+// 
+// 
+//#include <iostream>
+//#include <cstring>
+//#include <cassert>
+//
+//class String {
+//public:
+//    String(const char* str = "") 
+//        : _str(new char[strlen(str) + 1])
+//        , _count(new int(1))  // 一个string对象刚开始的 _count 就是 1
+//    {
+//        strcpy(_str, str);
+//    }
+//
+//    String(const String& s) 
+//        : _str(s._str)
+//        , _count(s._count) 
+//    {
+//        ++(*_count);
+//    }
+//
+//    String& operator=(const String& s) {
+//        if (this != &s) {
+//
+//            // 确保在没有对象再引用该资源时，正确地释放内存以避免内存泄漏
+//            if (--(*_count) == 0) {
+//                delete[] _str;
+//                delete _count;
+//            }
+//            _str = s._str;
+//            _count = s._count;
+//            ++(*_count);
+//        }
+//        return *this;
+//    }
+//
+//    ~String() {
+//        if (--(*_count) == 0) {
+//            delete[] _str;
+//            delete _count;
+//        }
+//    }
+//
+//    void modify(const char* newStr) {
+//        if (*_count > 1) {
+//            --(*_count);
+//            _str = new char[strlen(newStr) + 1];
+//            strcpy(_str, newStr);
+//            _count = new int(1);
+//        }
+//        else {
+//            _str = new char[strlen(newStr) + 1];
+//            strcpy(_str, newStr);
+//        }
+//    }
+//
+//    const char* c_str() const {
+//        return _str;
+//    }
+//
+//private:
+//    char* _str;
+//    int* _count;
+//};
+//
+//// 写时拷贝测试用例
+//void testCopyOnWrite() {
+//    String s1("Hello");
+//    String s2 = s1;
+//
+//    std::cout << "s1: " << s1.c_str() << ", s2: " << s2.c_str() << std::endl;
+//    std::cout << "修改前引用计数：" << std::endl;
+//
+//    s1.modify("World");
+//
+//    std::cout << "s1: " << s1.c_str() << ", s2: " << s2.c_str() << std::endl;
+//    std::cout << "修改后引用计数：" << std::endl;
+//}
+//
+//int main() {
+//    testCopyOnWrite();
+//    return 0;
+//}

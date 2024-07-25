@@ -1,5 +1,7 @@
-﻿#define _CRT_SECURE_NO_WARNINGS 1
+#define _CRT_SECURE_NO_WARNINGS 1
 
+
+// git 测试
 //﻿class A
 //{
 //

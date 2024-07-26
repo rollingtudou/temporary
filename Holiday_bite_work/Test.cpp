@@ -478,3 +478,64 @@
 //    testCopyOnWrite();
 //    return 0;
 //}
+
+
+
+
+
+
+//
+//// erasing from vector
+//#include <iostream>
+//#include <vector>
+//using namespace std;
+//
+//int main()
+//{
+//	std::vector<int> myvector;
+//
+//	// set some values (from 1 to 10)
+//	for (int i = 1; i <= 10; i++) myvector.push_back(i);
+//
+//	// erase the 6th element
+//	myvector.erase(myvector.begin() + 5);
+//
+//	// erase the first 3 elements:
+//	myvector.erase(myvector.begin(), myvector.begin() + 3);
+//
+//	std::cout << "myvector contains:";
+//	for (unsigned i = 0; i < myvector.size(); ++i)
+//		std::cout << ' ' << myvector[i];
+//	std::cout << '\n';
+//
+//	return 0;
+//}
+
+
+
+
+﻿int main()
+
+{
+
+	int ar[] = { 1,2,3,4,5,6,7,8,9,10 };
+
+	int n = sizeof(ar) / sizeof(int);
+
+	vector<int> v(ar, ar + n);
+
+	cout << v.size() << ":" << v.capacity() << endl;
+
+	v.reserve(100);
+
+	v.resize(20);
+
+	cout << v.size() << ":" << v.capacity() << endl;
+
+	v.reserve(50);
+
+	v.resize(5);
+
+	cout << v.size() << ":" << v.capacity() << endl;
+
+}

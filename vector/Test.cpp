@@ -211,7 +211,7 @@ void test_vector5()
 
 int main()
 {
-	bit::test_vector2();
+	bit::test_vector6();
 
 	return 0;
 }

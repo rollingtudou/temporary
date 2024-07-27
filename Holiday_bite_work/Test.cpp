@@ -507,36 +507,99 @@
 	   //	std::cout << "myvector contains:";
 	   //	for (unsigned i = 0; i < myvector.size(); ++i)
 	   //		std::cout << ' ' << myvector[i];
-	   //	std::cout << '\n';
-	   //
-	   //	return 0;
-	   //}
+//	   //	std::cout << '\n';
+//	   //
+//	   //	return 0;
+//	   //}
+//
+//
+//
+//
+//﻿int main()
+//
+//{
+//
+//	int ar[] = { 1,2,3,4,5,6,7,8,9,10 };
+//
+//	int n = sizeof(ar) / sizeof(int);
+//
+//	vector<int> v(ar, ar + n);
+//
+//	cout << v.size() << ":" << v.capacity() << endl;
+//
+//	v.reserve(100); // capacity = 100
+//
+//	v.resize(20);
+//
+//	cout << v.size() << ":" << v.capacity() << endl;
+//
+//	v.reserve(50);
+//
+//	v.resize(5);
+//
+//	cout << v.size() << ":" << v.capacity() << endl;
+//
+//}
+//
+//﻿int main()
+//
+//{
+//
+//	int ar[] = { 1,2,3,4,5,6,7,8,9,10 };
+//
+//	int n = sizeof(ar) / sizeof(int);  // 10
+//
+//	vector<int> v(ar, ar + n);
+//
+//	cout << v.size() << ":" << v.capacity() << endl;  // 10 : 10   
+//
+//	v.reserve(100);
+//
+//	v.resize(20);
+//
+//	cout << v.size() << ":" << v.capacity() << endl;  // 20 : 100
+//
+//	v.reserve(50);
+//
+//	v.resize(5);
+//
+//	cout << v.size() << ":" << v.capacity() << endl;  // 5 ： 100
+//
+//}
 
-
-
-
-﻿int main()
-
-{
-
-	int ar[] = { 1,2,3,4,5,6,7,8,9,10 };
-
-	int n = sizeof(ar) / sizeof(int);
-
-	vector<int> v(ar, ar + n);
-
-	cout << v.size() << ":" << v.capacity() << endl;
-
-	v.reserve(100); // capacity = 100
-
-	v.resize(20);
-
-	cout << v.size() << ":" << v.capacity() << endl;
-
-	v.reserve(50);
-
-	v.resize(5);
-
-	cout << v.size() << ":" << v.capacity() << endl;
-
-}
+//
+//
+//class Solution {
+//public:
+//	int MoreThanHalfNum_Solution(vector<int>& numbers) {
+//		int candidate = numbers[0];
+//		int count = 1;
+//
+//		for (int i = 1; i < numbers.size(); ++i) {
+//			if (count == 0) {
+//				candidate = numbers[i];
+//				count = 1;
+//			}
+//			else if (numbers[i] == candidate) {
+//				count++;
+//			}
+//			else {
+//				count--;
+//			}
+//		}
+//
+//		// 验证候选者是否确实超过数组长度的一半
+//		count = 0;
+//		for (int num : numbers) {
+//			if (num == candidate) {
+//				count++;
+//			}
+//		}
+//		if (count > numbers.size() / 2) {
+//			return candidate;
+//		}
+//		else {
+//			return -1; // 按题意，这里实际上不会执行
+//		}
+//	}
+//};

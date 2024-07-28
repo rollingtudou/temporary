@@ -723,60 +723,61 @@
 
 
 
-class Solution {
-public:
-	vector<string> letterCombinations(string digits) {
-		vector<string> combinations;
-		// 如果输入的字符串为空，直接返回空的结果
-		if (digits.empty()) {
-			return combinations;
-		}
-
-		// 用vector来存储数字到字母的映射
-		vector<string> phoneMap = {
-			"",    // 0
-			"",    // 1
-			"abc", // 2
-			"def", // 3
-			"ghi", // 4
-			"jkl", // 5
-			"mno", // 6
-			"pqrs",// 7
-			"tuv", // 8
-			"wxyz" // 9
-		};
-
-		string combination;
-
-		// 调用回溯函数
-		backtrack(combinations, phoneMap, digits, 0, combination);
-		return combinations;
-	}
-
-	void backtrack(vector<string>& combinations, const vector<string>& phoneMap
-		, const string& digits, int index, string& combination) 
-	{
-		// 如果当前索引等于输入字符串的长度，说明已经生成一个完整的组合
-		if (index == digits.length()) 
-		{
-			combinations.push_back(combination); // 将当前组合加入结果
-		}
-		else 
-		{
-			char digit = digits[index]; // 获取当前索引对应的数字字符
-			const string& letters = phoneMap[digit - '0']; // 通过数字字符查找对应的字母集合
-			// 遍历当前数字对应的每个字母
-			for (const char& letter : letters) 
-			{
-				combination.push_back(letter); // 将字母加入当前组合
-
-				// 当index为输入数字个数时，此时的combination中存的就是数字个数个字母相互组合
-				backtrack(combinations, phoneMap, digits, index + 1, combination); // 递归调用生成下一个位置的字母
-				combination.pop_back(); // 回溯，撤销最后一次添加的字母
-			}
-		}
-	}
-};
+//class Solution 
+//{
+//public:
+//	vector<string> letterCombinations(string digits) {
+//		vector<string> combinations;
+//		// 如果输入的字符串为空，直接返回空的结果
+//		if (digits.empty()) {
+//			return combinations;
+//		}
+//
+//		// 用vector来存储数字到字母的映射
+//		vector<string> phoneMap = {
+//			"",    // 0
+//			"",    // 1
+//			"abc", // 2
+//			"def", // 3
+//			"ghi", // 4
+//			"jkl", // 5
+//			"mno", // 6
+//			"pqrs",// 7
+//			"tuv", // 8
+//			"wxyz" // 9
+//		};
+//
+//		string combination;
+//
+//		// 调用回溯函数
+//		backtrack(combinations, phoneMap, digits, 0, combination);
+//		return combinations;
+//	}
+//
+//	void backtrack(vector<string>& combinations, const vector<string>& phoneMap
+//		, const string& digits, int index, string& combination) 
+//	{
+//		// 如果当前索引等于输入字符串的长度，说明已经生成一个完整的组合
+//		if (index == digits.length()) 
+//		{
+//			combinations.push_back(combination); // 将当前组合加入结果
+//		}
+//		else 
+//		{
+//			char digit = digits[index]; // 获取当前索引对应的数字字符
+//			const string& letters = phoneMap[digit - '0']; // 通过数字字符查找对应的字母集合
+//			// 遍历当前数字对应的每个字母
+//			for (const char& letter : letters) 
+//			{
+//				combination.push_back(letter); // 将字母加入当前组合
+//
+//				// 当index为输入数字个数时，此时的combination中存的就是数字个数个字母相互组合
+//				backtrack(combinations, phoneMap, digits, index + 1, combination); // 递归调用生成下一个位置的字母
+//				combination.pop_back(); // 回溯，撤销最后一次添加的字母
+//			}
+//		}
+//	}
+//};
 
 
 

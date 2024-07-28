@@ -603,3 +603,177 @@
 //		}
 //	}
 //};
+
+//class Solution {
+//public:
+//	int MoreThanHalfNum_Solution(vector<int>& numbers) {
+//		int candidate = numbers[0];
+//		int count = 1;
+//
+//		for (int i = 1; i < numbers.size(); ++i) {
+//			if (count == 0) {
+//				candidate = numbers[i];
+//				count = 1;
+//			}
+//			else if (numbers[i] == candidate) {
+//				count++;
+//			}
+//			else {
+//				count--;
+//			}
+//		}
+//
+//		// 验证候选者是否确实超过数组长度的一半
+//		count = 0;
+//		for (int num : numbers) {
+//			if (num == candidate) {
+//				count++;
+//			}
+//		}
+//		if (count > numbers.size() / 2) {
+//			return candidate;
+//		}
+//		else {
+//			return -1; // 按题意，这里实际上不会执行
+//		}
+//	}
+//};
+
+
+
+//class Solution {
+//public:
+//	vector<string> letterCombinations(string digits) {
+//		// 判空
+//		if (digits.empty()) return {};
+//
+//		vector<string> result;
+//		string combination;
+//
+//		// 每个mapping索引位置存储对应数字的数字的字母组合
+//		vector<string> mapping = {
+//			"",    // 0
+//			"",    // 1
+//			"abc", // 2
+//			"def", // 3
+//			"ghi", // 4
+//			"jkl", // 5
+//			"mno", // 6
+//			"pqrs",// 7
+//			"tuv", // 8
+//			"wxyz" // 9
+//		};
+//
+//		backtrack(result, combination, digits, 0, mapping);
+//		return result;
+//	}
+//
+//private:
+//	void backtrack(vector<string>& result, string& combination, const string& digits, int index, const vector<string>& mapping) {
+//		if (index == digits.size()) {
+//			result.push_back(combination);
+//			return;
+//		}
+//
+//		string letters = mapping[digits[index] - '0'];
+//		for (char letter : letters) {
+//			combination.push_back(letter);
+//			backtrack(result, combination, digits, index + 1, mapping);
+//			combination.pop_back();
+//		}
+//	}
+//}
+// 
+// 
+// 
+
+//
+//﻿int main()
+//
+//{
+//
+//	int ar[] = { 1,2,3,4,0,5,6,7,8,9 };
+//
+//	int n = sizeof(ar) / sizeof(int);
+//
+//	vector<int> v(ar, ar + n);
+//
+//	vector<int>::iterator it = v.begin();
+//
+//	while (it != v.end())
+//	{
+//
+//		if (*it != 0)
+//		{
+//			cout << *it;
+//		}
+//		else
+//		{
+//			v.erase(it);
+//		}
+//
+//		it++;
+//
+//	}
+//
+//	return 0;
+//
+//}
+//
+
+
+
+class Solution {
+public:
+	vector<string> letterCombinations(string digits) {
+		vector<string> combinations;
+		// 如果输入的字符串为空，直接返回空的结果
+		if (digits.empty()) {
+			return combinations;
+		}
+
+		// 用vector来存储数字到字母的映射
+		vector<string> phoneMap = {
+			"",    // 0
+			"",    // 1
+			"abc", // 2
+			"def", // 3
+			"ghi", // 4
+			"jkl", // 5
+			"mno", // 6
+			"pqrs",// 7
+			"tuv", // 8
+			"wxyz" // 9
+		};
+
+		string combination;
+
+		// 调用回溯函数
+		backtrack(combinations, phoneMap, digits, 0, combination);
+		return combinations;
+	}
+
+	void backtrack(vector<string>& combinations, const vector<string>& phoneMap
+		, const string& digits, int index, string& combination) 
+	{
+		// 如果当前索引等于输入字符串的长度，说明已经生成一个完整的组合
+		if (index == digits.length()) 
+		{
+			combinations.push_back(combination); // 将当前组合加入结果
+		}
+		else 
+		{
+			char digit = digits[index]; // 获取当前索引对应的数字字符
+			const string& letters = phoneMap[digit - '0']; // 通过数字字符查找对应的字母集合
+			// 遍历当前数字对应的每个字母
+			for (const char& letter : letters) 
+			{
+				combination.push_back(letter); // 将字母加入当前组合
+
+				// 当index为输入数字个数时，此时的combination中存的就是数字个数个字母相互组合
+				backtrack(combinations, phoneMap, digits, index + 1, combination); // 递归调用生成下一个位置的字母
+				combination.pop_back(); // 回溯，撤销最后一次添加的字母
+			}
+		}
+	}
+};

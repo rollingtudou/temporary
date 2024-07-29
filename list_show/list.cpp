@@ -330,7 +330,7 @@ int main()
 	//test_list6();
 	//test_op2();
 
-	bit::test_list1();
+	bit::test_list4();
 
 	return 0;
 }

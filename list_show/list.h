@@ -1,4 +1,5 @@
 #pragma once
+#include<assert.h>
 
 namespace bit
 {
@@ -16,21 +17,25 @@ namespace bit
 		{}
 	};
 
-	// const_iterator
-	template<class T>
+	template<class T, class Ref, class Ptr>
 	struct list_iterator
 	{
 		typedef list_node<T> Node;
-		typedef list_iterator<T> Self;
+		typedef list_iterator<T, Ref, Ptr> Self;
 		Node* _node;
 
 		list_iterator(Node* node)
 			:_node(node)
 		{}
 
-		T& operator*()
+		Ref operator*()
 		{
 			return _node->_data;
+		}
+
+		Ptr operator->()
+		{
+			return &_node->_data;
 		}
 
 		Self& operator++()
@@ -45,6 +50,22 @@ namespace bit
 			return *this;
 		}
 
+		Self operator++(int)
+		{
+			Self tmp(*this);
+			_node = _node->_next;
+
+			return tmp;
+		}
+
+		Self& operator--(int)
+		{
+			Self tmp(*this);
+			_node = _node->_prev;
+
+			return tmp;
+		}
+
 		bool operator!=(const Self& s) const
 		{
 			return _node != s._node;
@@ -56,12 +77,77 @@ namespace bit
 		}
 	};
 
+
+	/*template<class T>
+	struct list_const_iterator
+	{
+		typedef list_node<T> Node;
+		typedef list_const_iterator<T> Self;
+		Node* _node;
+
+		list_const_iterator(Node* node)
+			:_node(node)
+		{}
+
+		const T& operator*()
+		{
+			return _node->_data;
+		}
+
+		const T* operator->()
+		{
+			return &_node->_data;
+		}
+
+		Self& operator++()
+		{
+			_node = _node->_next;
+			return *this;
+		}
+
+		Self& operator--()
+		{
+			_node = _node->_prev;
+			return *this;
+		}
+
+		Self operator++(int)
+		{
+			Self tmp(*this);
+			_node = _node->_next;
+
+			return tmp;
+		}
+
+		Self& operator--(int)
+		{
+			Self tmp(*this);
+			_node = _node->_prev;
+
+			return tmp;
+		}
+
+		bool operator!=(const Self& s) const
+		{
+			return _node != s._node;
+		}
+
+		bool operator==(const Self& s) const
+		{
+			return _node == s._node;
+		}
+	};*/
+
 	template<class T>
 	class list
 	{
 		typedef list_node<T> Node;
 	public:
-		typedef list_iterator<T> iterator;
+		/*typedef list_iterator<T> iterator;
+		typedef list_const_iterator<T> const_iterator;*/
+
+		typedef list_iterator<T, T&, T*> iterator;
+		typedef list_iterator<T, const T&, const T*> const_iterator;
 
 		iterator begin()
 		{
@@ -76,12 +162,76 @@ namespace bit
 			return _head;
 		}
 
-		list()
+		const_iterator begin() const
+		{
+			return _head->_next;
+		}
+
+		const_iterator end() const
+		{
+			return _head;
+		}
+
+		void empty_init()
 		{
 			_head = new Node;
 			_head->_next = _head;
 			_head->_prev = _head;
 			_size = 0;
+		}
+
+		list()
+		{
+			empty_init();
+		}
+
+		list(initializer_list<T> il)
+		{
+			empty_init();
+			for (auto& e : il)
+			{
+				push_back(e);
+			}
+		}
+
+		// lt2(lt1)
+		list(const list<T>& lt)
+		{
+			empty_init();
+
+			for (auto& e : lt)
+			{
+				push_back(e);
+			}
+		}
+
+		// lt1 = lt3
+		list<T>& operator=(list<T> lt)
+		{
+			swap(lt);
+			return *this;
+		}
+
+		~list()
+		{
+			clear();
+			delete _head;
+			_head = nullptr;
+		}
+
+		void clear()
+		{
+			auto it = begin();
+			while (it != end())
+			{
+				it = erase(it);
+			}
+		}
+
+		void swap(list<T>& lt)
+		{
+			std::swap(_head, lt._head);
+			std::swap(_size, lt._size);
 		}
 
 		void push_back(const T& x)
@@ -104,11 +254,10 @@ namespace bit
 			insert(begin(), x);
 		}
 
-		void insert(iterator pos, const T& x)
+		iterator insert(iterator pos, const T& x)
 		{
 			Node* cur = pos._node;
 			Node* prev = cur->_prev;
-
 			Node* newnode = new Node(x);
 
 			// prev newnode cur
@@ -118,6 +267,8 @@ namespace bit
 			prev->_next = newnode;
 
 			++_size;
+
+			return newnode;
 		}
 
 		void pop_back()
@@ -130,7 +281,7 @@ namespace bit
 			erase(begin());
 		}
 
-		void erase(iterator pos)
+		iterator erase(iterator pos)
 		{
 			assert(pos != end());
 
@@ -142,6 +293,8 @@ namespace bit
 			delete pos._node;
 
 			--_size;
+
+			return next;
 		}
 
 		size_t size() const
@@ -158,6 +311,38 @@ namespace bit
 		size_t _size;
 	};
 
+	struct AA
+	{
+		int _a1 = 1;
+		int _a2 = 1;
+	};
+
+	// 按需实例化
+	// T* const ptr1
+	// const T* ptr2
+	template<class Container>
+	void print_container(const Container& con)
+	{
+		// const iterator -> 迭代器本身不能修改
+		// const_iterator -> 指向内容不能修改
+		typename Container::const_iterator it = con.begin();
+		//auto it = con.begin();
+		while (it != con.end())
+		{
+			//*it += 10;
+
+			cout << *it << " ";
+			++it;
+		}
+		cout << endl;
+
+		for (auto e : con)
+		{
+			cout << e << " ";
+		}
+		cout << endl;
+	}
+
 	void test_list1()
 	{
 		list<int> lt;
@@ -169,9 +354,116 @@ namespace bit
 		list<int>::iterator it = lt.begin();
 		while (it != lt.end())
 		{
+			*it += 10;
+
 			cout << *it << " ";
 			++it;
 		}
 		cout << endl;
+
+		for (auto e : lt)
+		{
+			cout << e << " ";
+		}
+		cout << endl;
+		print_container(lt);
+
+		list<AA> lta;
+		lta.push_back(AA());
+		lta.push_back(AA());
+		lta.push_back(AA());
+		lta.push_back(AA());
+		list<AA>::iterator ita = lta.begin();
+		while (ita != lta.end())
+		{
+			//cout << (*ita)._a1 << ":" << (*ita)._a2 << endl;
+			// 特殊处理，本来应该是两个->才合理，为了可读性，省略了一个->
+			cout << ita->_a1 << ":" << ita->_a2 << endl;
+			cout << ita.operator->()->_a1 << ":" << ita.operator->()->_a2 << endl;
+
+			++ita;
+		}
+		cout << endl;
+	}
+
+	void test_list2()
+	{
+		list<int> lt;
+		lt.push_back(1);
+		lt.push_back(2);
+		lt.push_back(3);
+		lt.push_back(4);
+
+		// insert以后迭代器不失效
+		list<int>::iterator it = lt.begin();
+		lt.insert(it, 10);
+		*it += 100;
+
+		print_container(lt);
+
+		// erase以后迭代器失效
+		// 删除所有的偶数
+		it = lt.begin();
+		while (it != lt.end())
+		{
+			if (*it % 2 == 0)
+			{
+				it = lt.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+
+		print_container(lt);
+	}
+
+	void test_list3()
+	{
+		list<int> lt1;
+		lt1.push_back(1);
+		lt1.push_back(2);
+		lt1.push_back(3);
+		lt1.push_back(4);
+
+		list<int> lt2(lt1);
+
+		print_container(lt1);
+		print_container(lt2);
+
+		list<int> lt3;
+		lt3.push_back(10);
+		lt3.push_back(20);
+		lt3.push_back(30);
+		lt3.push_back(40);
+
+		lt1 = lt3;
+		print_container(lt1);
+		print_container(lt3);
+	}
+
+	void func(const list<int>& lt)
+	{
+		print_container(lt);
+	}
+
+	void test_list4()
+	{
+		// 直接构造
+		list<int> lt0({ 1,2,3,4,5,6 });
+		// 隐式类型转换
+		list<int> lt1 = { 1,2,3,4,5,6,7,8 };
+		const list<int>& lt3 = { 1,2,3,4,5,6,7,8 };
+
+		func(lt0);
+		func({ 1,2,3,4,5,6 });
+
+		print_container(lt1);
+
+		//auto il = { 10, 20, 30 };
+	/*	initializer_list<int> il = { 10, 20, 30 };
+		cout << typeid(il).name() << endl;
+		cout << sizeof(il) << endl;*/
 	}
 }

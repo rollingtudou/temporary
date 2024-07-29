@@ -242,7 +242,7 @@ namespace bit
 		}
 
 		const T& operator[](size_t i) const
-		{
+		{ 
 			assert(i < size());
 
 			return _start[i];

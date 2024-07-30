@@ -839,3 +839,9 @@
 //	}
 //	cout << endl;
 //}
+
+//
+//T* operator->()
+//{
+//	return &_node->_date;
+//}

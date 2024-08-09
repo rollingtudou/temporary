@@ -1013,3 +1013,76 @@
 
 
 // SD test 12
+
+//
+//class Base final
+//{
+//public:
+//	void func5() { cout << "Base::func5" << endl; }
+//
+//protected:
+//	int a = 1;
+//
+//private:
+//	// C++98的⽅法
+//	/*Base()
+//	{}*/
+//};
+
+
+//#include <iostream>
+//#include <string>
+//
+//using namespace std;
+//
+//class Person {
+//public:
+//	string _name;
+//	static int _count;
+//};
+//
+//int Person::_count = 0; // 静态成员初始化
+//
+//class Student : public Person {
+//protected:
+//	int _stuNum;
+//	static int _count;
+//
+//};
+//
+//int Student::_count = 0; // 静态成员初始化
+//
+//
+//int main() {
+//	Person p;
+//	Student s;
+//
+//	// 非静态成员_name地址不同，说明子类继承后，父子类对象各有一份
+//	cout << &p._name << endl;
+//	cout << &s._name << endl;
+//
+//	// 静态成员_count地址相同，说明子类和父类共用同一个静态成员
+//	cout << &p._count << endl;
+//	cout << &s._count << endl;
+//
+//	// 公有的情况下，父子类都可以访问静态成员
+//	cout << Person::_count << endl;
+//	cout << Student::_count << endl;
+//
+//	return 0;
+//}
+
+
+
+class Base1 { public: int _b1; };
+class Base2 { public: int _b2; };
+class Derive : public Base1, public Base2 { public: int _d; };
+
+int main()
+{
+	Derive d;
+	Base1* p1 = &d;
+	Base2* p2 = &d;
+	Derive* p3 = &d;
+	return 0;
+}

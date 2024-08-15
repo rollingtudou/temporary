@@ -1072,7 +1072,7 @@
 //	return 0;
 //}
 
-
+// test 13
 
 class Base1 { public: int _b1; };
 class Base2 { public: int _b2; };

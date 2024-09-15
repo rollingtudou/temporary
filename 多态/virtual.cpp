@@ -95,3 +95,65 @@
 //
 //    return 0;
 //}
+
+
+
+#include<iostream>
+using namespace std;
+
+class Person {
+public:
+    virtual void BuyTicket() {
+        std::cout << "买票-全价" << std::endl;
+    }
+};
+
+class Student : public Person {
+public:
+    void BuyTicket() override {
+        std::cout << "买票-打折" << std::endl;
+    }
+};
+
+class Soldier : public Person {
+public:
+    void BuyTicket() override {
+        std::cout << "买票-优先" << std::endl;
+    }
+};
+
+void Func(Person* ptr) {
+    ptr->BuyTicket();  // 通过指针调用虚函数
+}
+
+int main() {
+    Person ps;
+    Student st;
+    Soldier sr;
+
+    Func(&ps);  // 输出: 买票-全价
+    Func(&st);  // 输出: 买票-打折
+    Func(&sr);  // 输出: 买票-优先
+    return 0;
+}
+
+
+
+class A
+{
+public :
+    virtual void func(int val = 1) { std::cout << "A->" << val << std::endl; }
+    virtual void test() { func(); }
+};
+class B : public A
+{
+public :
+    void func(int val = 0) { std::cout << "B->" << val << std::endl; }
+};
+int main(int argc, char* argv[])
+{
+    B* p = new B;
+    p->test();
+
+    return 0;
+}

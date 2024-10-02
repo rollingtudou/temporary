@@ -30,28 +30,26 @@ class AVLTree
 public:
 	bool Insert(const pair<K, V>& kv)
 	{
-		if (_root== nullptr)
+		if (_root == nullptr)
 		{
 			_root = new Node(kv);
-			
 			return true;
 		}
 
 		Node* parent = nullptr;
 		Node* cur = _root;
 
-		// find insert place
 		while (cur)
 		{
-			if (cur->_kv.frist < kv.frist)
+			if (cur->_kv.first < kv.first)
 			{
 				parent = cur;
 				cur = cur->_right;
 			}
-			else if (cur->_kv.frist > kv.frist)
+			else if (cur->_kv.first > kv.first)
 			{
 				parent = cur;
-				cur = cur->_kv.frist;
+				cur = cur->_left;
 			}
 			else
 			{
@@ -59,10 +57,8 @@ public:
 			}
 		}
 
-		// 找到后确认插入位置然后链接
 		cur = new Node(kv);
-
-		if (parent->kv.frist < kv.first)
+		if (parent->_kv.first < kv.first)
 		{
 			parent->_right = cur;
 		}
@@ -70,35 +66,49 @@ public:
 		{
 			parent->_left = cur;
 		}
-
+		// 链接父亲
 		cur->_parent = parent;
 
-		
+		// 控制平衡
 		// 更新平衡因子
 		while (parent)
 		{
 			if (cur == parent->_left)
-			{
-				parent--;
-			}
+				parent->_bf--;
 			else
-			{
-				parent++;
-			}
+				parent->_bf++;
 
 			if (parent->_bf == 0)
 			{
 				break;
 			}
-			else if (parent->_bf == -1 || parent->_bf == 1)
+			else if (parent->_bf == 1 || parent->_bf == -1)
 			{
 				cur = parent;
 				parent = parent->_parent;
 			}
-			else if (parent->_bf == -2 || parent->_bf == 2)
+			else if (parent->_bf == 2 || parent->_bf == -2)
 			{
-				// 旋转
-				RotateR(parent);
+				if (parent->_bf == -2 && cur->_bf == -1)
+				{
+					RotateR(parent);
+				}
+				else if (parent->_bf == 2 && cur->_bf == 1)
+				{
+					RotateL(parent);
+				}
+				else if (parent->_bf == -2 && cur->_bf == 1)
+				{
+					RotateLR(parent);
+				}
+				else if (parent->_bf == 2 && cur->_bf == -1)
+				{
+					RotateRL(parent);
+				}
+				else
+				{
+					assert(false);
+				}
 
 				break;
 			}
@@ -128,8 +138,8 @@ private:
 	// 根据AVL树的概念验证pRoot是否为有效的AVL树
 	bool _IsAVLTree(Node* pRoot);
 	size_t _Height(Node* pRoot);
-	// 右单旋
 	
+	// 右单旋
 	void RotateR(Node* parent)
 	{
 		Node* subL = parent->_left;
@@ -175,8 +185,7 @@ private:
 
 		parent->_right = subRL;
 		if (subRL)
-			subRL->_parent = parent
-			;
+			subRL->_parent = parent;
 
 		Node* pParent = parent->_parent;
 
@@ -312,7 +321,107 @@ private:
 		return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
 	}
 
+	bool _IsBalanceTree(Node* root)
+	{
 
+	}
 
 	Node* _root = nullptr;
 };
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////   删除
+
+bool Erase(const K& key) {
+	Node* parent = nullptr;
+	Node* cur = _root;
+
+	// 1. 查找要删除的节点
+	while (cur) {
+		if (cur->_kv.first < key) {
+			parent = cur;
+			cur = cur->_right;
+		}
+		else if (cur->_kv.first > key) {
+			parent = cur;
+			cur = cur->_left;
+		}
+		else {
+			break;
+		}
+	}
+
+	if (!cur) {
+		return false; // 节点不存在
+	}
+
+	// 2. 执行删除操作
+	// 如果有两个子节点
+	if (cur->_left && cur->_right) {
+		Node* replace = cur->_left;
+		parent = cur;
+
+		// 找到左子树的最右节点（即前驱节点）
+		while (replace->_right) {
+			parent = replace;
+			replace = replace->_right;
+		}
+
+		// 用前驱节点替换当前节点的值
+		cur->_kv = replace->_kv;
+		cur = replace;
+	}
+
+	// 只有一个子节点或没有子节点
+	Node* subTree = cur->_left ? cur->_left : cur->_right;
+
+	if (!parent) {
+		// 删除的是根节点
+		_root = subTree;
+	}
+	else {
+		if (parent->_left == cur) {
+			parent->_left = subTree;
+		}
+		else {
+			parent->_right = subTree;
+		}
+
+		if (subTree) {
+			subTree->_parent = parent;
+		}
+	}
+
+	// 删除节点
+	delete cur;
+
+	// 3. 更新平衡因子并旋转
+	while (parent) {
+		if (subTree == parent->_left) {
+			parent->_bf++;
+		}
+		else {
+			parent->_bf--;
+		}
+
+		if (parent->_bf == 1 || parent->_bf == -1) {
+			break;  // 高度没有发生变化，停止调整
+		}
+
+		if (parent->_bf == 2 || parent->_bf == -2) {
+			// 旋转
+			Rebalance(parent);
+		}
+
+		subTree = parent;
+		parent = parent->_parent;
+	}
+
+	return true;
+}
